@@ -1,0 +1,118 @@
+.content-container {
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.judul {
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #263238;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.filter-section {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Ini yang bikin tengah secara horizontal */
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+
+.filter-section label {
+    font-weight: bold;
+    color: #37474F;
+}
+
+.filter-section input[type="date"] {
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #B0BEC5;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.filter-section input[type="date"]:focus {
+    border-color: #1976D2;
+}
+
+.filter-button, .download-button, .reset-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.filter-button {
+    background-color: #ef5350;
+    color: white;
+}
+
+.filter-button:hover {
+    background-color: #d32f2f;
+    transform: scale(1.03);
+}
+.reset-button {
+    background-color: #33a7dc;
+    color: white;
+}
+
+.reset-button:hover {
+    background-color: #3396c4;
+    transform: scale(1.03);
+}
+
+.download-button {
+    background-color: #66bb6a;
+    color: white;
+}
+
+.download-button:hover {
+    background-color: #388e3c;
+    transform: scale(1.03);
+}
+
+.tabel-data {
+    overflow-x: auto;
+    margin-top: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+thead tr {
+    background-color: #37474F;
+    color: white;
+    text-align: center;
+}
+
+th, td {
+    padding: 14px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f0f4f8;
+}
+
+tbody tr:hover {
+    background-color: #e3f2fd;
+}

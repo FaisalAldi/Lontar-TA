@@ -1,0 +1,168 @@
+/* RESET & GLOBAL */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* hilangkan scroll dari body */
+}
+
+/* CONTAINER */
+.container {
+    display: flex;
+    height: 100vh; /* biar full layar */
+}
+
+
+/* SIDEBAR */
+.sidebar-section {
+    display: flex;
+    flex-direction: column;
+    width: 210px;
+    background-color: #263238;
+    height: 100vh;
+    flex-shrink: 0;
+}
+
+
+.sidebar-top {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    width: 50px;
+    height: auto;
+}
+
+/* SIDEBAR NAV */
+.sidebar {
+    padding: 20px;
+    flex: 1;
+}
+
+.sidebar p {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: white;
+    font-size: 20px;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+    font-size: 14px;
+    color: #efefef;
+    text-decoration: none;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.sidebar a i {
+    margin-right: 8px;
+}
+
+.sidebar a:hover {
+    transform: scale(1.1);
+    color: #ffffff;
+}
+
+/* Collapse hide content */
+.sidebar-section.collapsed .sidebar {
+    display: none;
+}
+
+/* HEADER */
+.header {
+    height: 60px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 15px;
+    position: relative;
+    z-index: 1;
+}
+
+/* TOGGLE BUTTON */
+.toggle-sidebar {
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* NOTIFIKASI */
+.icon-notifikasi {
+    background: none;
+    border: none;
+    color: black;
+    font-size: 20px;
+    cursor: pointer;
+    position: absolute;
+    right: 5%;
+}
+
+.popup-notifikasi {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 10px 15px;
+    z-index: 999;
+    width: 250px;
+}
+
+/* CONTENT */
+.content {
+    flex: 1;
+    overflow-y: auto; /* hanya scroll di content */
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.header h2 {
+    margin: 0;
+}
+
+.main-section {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100vh;
+    overflow: hidden; /* hilangkan scroll utama */
+}
+
+.sidebar-section.collapsed .sidebar-top {
+    display: none;
+}
+
+/* Sembunyikan tombol garis tiga di layar besar */
+.mobile-toggle {
+    display: none;
+}
+
+/* Tampilkan tombol garis tiga hanya di layar kecil (<=768px) */
+@media (max-width: 768px) {
+    .mobile-toggle {
+        display: inline-block;
+    }
+    .sidebar-section.collapsed {
+    width: 0px;
+}
+}
+
+
