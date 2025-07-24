@@ -11,8 +11,16 @@ class AmbangBatas extends Model
 
     protected $fillable = [
         'nama_sensor',
-        'level',
+        'level_id',
         'min',
         'max',
     ];
+
+    /**
+     * Relasi ke model Level
+     */
+    public function level()
+    {
+        return $this->belongsTo(Level::class, 'level_id');
+    }
 }

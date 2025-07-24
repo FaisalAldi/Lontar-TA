@@ -19,7 +19,7 @@
                             <i class="fas fa-compass icon"></i>
                             <div class="data-wrapper">
                                 <div class="data-group">
-                                    <div class="value"><span id="kemiringan">{{ $latestSensor->kemiringan ?? '-' }}</span></div>
+                                    <div class="value"><span id="kemiringan">-</span></div>
                                     <div class="unit">Derajat</div>
                                 </div>
                             </div>
@@ -32,7 +32,7 @@
                        <div class="icon-value">
                             <i class="fas fa-rss icon"></i>
                             <div>
-                                <div class="value"><span id="getaran">{{ $latestSensor->getaran ?? '-' }}</span></div>
+                                <div class="value"><span id="getaran">-</span></div>
                                 <div class="unit">Hertz<br>(Hz)</div>
                             </div>
                        </div>
@@ -44,7 +44,7 @@
                         <div class="icon-value">
                             <i class="fas fa-tint icon"></i>
                             <div>
-                                <div class="value"><span id="kelembapan">{{ $latestSensor->kelembapan ?? '-' }}</span></div>
+                                <div class="value"><span id="kelembapan">-</span></div>
                                 <div class="unit">Relative Humidity<br>(RH)</div>
                             </div>
                         </div>
@@ -80,11 +80,12 @@
                 @endphp
 
                 <div class="bahaya-container" id="bahayaContainer">
-                    <div class="bahaya-box normal" id="boxNormal">Normal</div>
-                    <div class="bahaya-box siaga" id="boxSiaga">Siaga</div>
-                    <div class="bahaya-box waspada" id="boxWaspada">Waspada</div>
-                    <div class="bahaya-box awas" id="boxAwas">Awas</div>
+                    <div class="bahaya-box normal {{ $normalClass }}" id="boxNormal">Normal</div>
+                    <div class="bahaya-box siaga {{ $siagaClass }}" id="boxSiaga">Siaga</div>
+                    <div class="bahaya-box waspada {{ $waspadaClass }}" id="boxWaspada">Waspada</div>
+                    <div class="bahaya-box awas {{ $awasClass }}" id="boxAwas">Awas</div>
                 </div>
+
 
                 <div class="deskripsi-level">
                     <h4>Deskripsi Level</h4>
@@ -187,7 +188,7 @@
         }
     }
 
-    setInterval(loadGabunganChartData, 1000); 
+    setInterval(loadGabunganChartData, 5000); 
 
 </script>
 <script>
@@ -195,53 +196,61 @@ function fetchLatestSensorData() {
     fetch('/api/latest-sensor')
         .then(response => response.json())
         .then(data => {
-            // Tampilkan data ke elemen HTML
-            document.getElementById('getaran').innerText = data.getaran;
-            document.getElementById('kelembapan').innerText = data.kelembapan;
-            document.getElementById('kemiringan').innerText = data.kemiringan;
+             console.log("DATA SENSOR DARI API:", data); // << ini log utamanya
+             
+            document.getElementById('kemiringan').innerText = data.kemiringan ?? '-';
+            document.getElementById('getaran').innerText = data.getaran ?? '-';
+            document.getElementById('kelembapan').innerText = data.kelembapan ?? '-';
 
-            // Hapus kelas aktif dari semua status
-            document.querySelectorAll('.bahaya-box').forEach(el => el.classList.remove('aktif'));
+            // Perbarui status bahaya
+            const status = data.tingkat_bahaya?.toLowerCase(); // misalnya "Normal" jadi "normal"
 
-            // Tambahkan kelas aktif ke status yang sesuai
-            const status = data.bahaya?.toLowerCase(); // "Normal" -> "normal"
+            document.querySelectorAll('.bahaya-box').forEach(el => el.classList.remove('bahaya-aktif-normal', 'bahaya-aktif-siaga', 'bahaya-aktif-waspada', 'bahaya-aktif-awas'));
+
             if (status) {
-                const el = document.querySelector(`.bahaya-box.${status}`);
-                if (el) el.classList.add('aktif');
+                const box = document.getElementById('box' + capitalizeFirstLetter(status));
+                if (box) {
+                    box.classList.add('bahaya-aktif-' + status);
+                }
             }
         })
         .catch(error => console.error('Gagal fetch data sensor:', error));
 }
 
-setInterval(fetchLatestSensorData, 3000); // refresh tiap 3 detik
+function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+
+setInterval(fetchLatestSensorData, 5000); // refresh tiap 5 detik
 </script>
 <script>
     function updateBahayaBox(bahaya) {
-        const classes = {
-            'Normal': 'bahaya-aktif-normal',
-            'Siaga': 'bahaya-aktif-siaga',
-            'Waspada': 'bahaya-aktif-waspada',
-            'Awas': 'bahaya-aktif-awas'
-        };
+    const classes = {
+        'Normal': 'bahaya-aktif-normal',
+        'Siaga': 'bahaya-aktif-siaga',
+        'Waspada': 'bahaya-aktif-waspada',
+        'Awas': 'bahaya-aktif-awas'
+    };
 
-        ['Normal', 'Siaga', 'Waspada', 'Awas'].forEach(level => {
-            const box = document.getElementById('box' + level);
-            box.classList.remove(classes[level]);
-            if (level === bahaya) {
-                box.classList.add(classes[level]);
-            }
-        });
-    }
+    ['Normal', 'Siaga', 'Waspada', 'Awas'].forEach(level => {
+        const box = document.getElementById('box' + level);
+        box.classList.remove(classes[level]);
+        if (level === bahaya) {
+            box.classList.add(classes[level]);
+        }
+    });
+}
 
     function fetchLatestBahaya() {
-        fetch('{{ route('latest.sensor') }}')
-            .then(response => response.json())
-            .then(data => {
-                if (data.bahaya) {
-                    updateBahayaBox(data.bahaya);
-                }
-            })
-            .catch(error => console.error('Error fetching bahaya:', error));
+    fetch('/api/latest-sensor')
+        .then(response => response.json())
+        .then(data => {
+            if (data.tingkat_bahaya) {
+                updateBahayaBox(data.tingkat_bahaya);
+            }
+        })
+        .catch(error => console.error('Error fetching bahaya:', error));
     }
 
     // Jalankan saat awal dan setiap 5 detik

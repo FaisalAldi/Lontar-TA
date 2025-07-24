@@ -5,25 +5,35 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DataSensor;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log; // ini sudah benar, pastikan tidak typo!
 
 class DashboardController extends Controller
 {
     public function getLatestSensor()
     {
-        $latestSensor = DataSensor::latest()->first();
+        $latestSensor = DataSensor::with('level')->latest()->first();
+
+         // Tambahkan log
+    Log::info('Data Sensor Terkini:', [
+        'kemiringan' => $latestSensor->kemiringan,
+        'getaran' => $latestSensor->getaran,
+        'kelembapan' => $latestSensor->kelembapan,
+        'level' => $latestSensor->level->nama ?? 'Tidak diketahui',
+        'created_at' => $latestSensor->created_at->toDateTimeString(),
+    ]);
 
         return response()->json([
             'kemiringan' => $latestSensor->kemiringan,
             'getaran' => $latestSensor->getaran,
             'kelembapan' => $latestSensor->kelembapan,
-            'bahaya' => $latestSensor->bahaya,
+            'tingkat_bahaya' => $latestSensor->level->nama ?? 'Tidak diketahui',
             'created_at' => $latestSensor->created_at->toDateTimeString(),
         ]);
     }
 
     public function get10DataSensor()
     {
-        $data = \App\Models\DataSensor::orderBy('created_at','desc')->take(10)->get()->reverse();
+        $data = DataSensor::orderBy('created_at', 'desc')->take(10)->get()->reverse();
 
         $result = [
             'labels' => [],
@@ -33,7 +43,7 @@ class DashboardController extends Controller
         ];
 
         foreach ($data as $item) {
-            $result['labels'][] = \Carbon\Carbon::parse($item->created_at)->format('H:i:s');
+            $result['labels'][] = Carbon::parse($item->created_at)->format('H:i:s');
             $result['kemiringan'][] = $item->kemiringan;
             $result['getaran'][] = $item->getaran;
             $result['kelembapan'][] = $item->kelembapan;
@@ -47,12 +57,11 @@ class DashboardController extends Controller
 
     public function getTrendTerkini()
     {
-        $trend = DataSensor::orderBy('created_at', 'desc')->take(20)->get();
+        $trend = DataSensor::orderBy('created_at', 'desc')->take(20)->with('level')->get();
         $trendTerkini = [];
 
-        // Ambil level bahaya terbaru
-        $latestData = DataSensor::latest()->first();
-        $bahaya = $latestData->bahaya ?? 'Normal';
+        $latestData = $trend->first(); // sudah terurut descending
+        $bahaya = $latestData->level->nama ?? 'Normal';
         $tanggalTerbaru = Carbon::parse($latestData->created_at)->format('d/m/Y');
 
         // Tambahkan status bahaya terbaru langsung
@@ -62,7 +71,6 @@ class DashboardController extends Controller
         $sudahKemiringan = false;
         $sudahGetaran = false;
         $sudahKelembapan = false;
-        
 
         foreach ($trend as $data) {
             $tanggal = Carbon::parse($data->created_at)->format('d/m/Y');
@@ -87,8 +95,8 @@ class DashboardController extends Controller
         }
 
         return response()->json([
-        'trendTerkini' => $trendTerkini,
-        'bahaya' => $bahaya,
-    ]);
+            'trendTerkini' => $trendTerkini,
+            'bahaya' => $bahaya,
+        ]);
     }
 }

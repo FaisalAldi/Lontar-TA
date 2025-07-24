@@ -15,7 +15,12 @@ class DataSensor extends Model
         'kemiringan',
         'getaran',
         'kelembapan',
-        'bahaya',
+        'level_id',
         'created_at',
     ];
+    public function level()
+{
+    return $this->belongsTo(Level::class, 'level_id');
+}
+
 }

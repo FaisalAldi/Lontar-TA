@@ -83,7 +83,7 @@
                             <td>${item.kemiringan}</td>
                             <td>${item.getaran}</td>
                             <td>${item.kelembapan}</td>
-                            <td>${item.bahaya ?? 'Tidak Terdeteksi'}</td>
+                            <td>${item.tingkat_bahaya ?? 'Tidak Terdeteksi'}</td>
                         </tr>
                     `;
                     tbody.innerHTML += row;
@@ -131,7 +131,7 @@
                             <td>${item.kemiringan}</td>
                             <td>${item.getaran}</td>
                             <td>${item.kelembapan}</td>
-                            <td>${item.bahaya ?? 'Tidak Terdeteksi'}</td>
+                            <td>${item.tingkat_bahaya ?? 'Tidak Terdeteksi'}</td>
                         </tr>
                     `;
                     tbody.innerHTML += row;

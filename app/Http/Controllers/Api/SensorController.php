@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DataSensor;
 use App\Models\AmbangBatas;
+use App\Models\Level; 
 use Illuminate\Support\Facades\Log;
 
 class SensorController extends Controller
@@ -18,15 +19,18 @@ class SensorController extends Controller
                 'kemiringan' => 'required|numeric',
                 'getaran'    => 'required|numeric',
                 'kelembapan' => 'required|numeric',
+                
             ]);
 
             // Fungsi mencari level berdasarkan nilai ambang batas
             $getLevel = function ($sensorName, $value) {
-                $ambangList = AmbangBatas::where('nama_sensor', $sensorName)->get();
+                $ambangList = AmbangBatas::where('nama_sensor', $sensorName)
+                    ->with('level') // eager load relasi level
+                    ->get();
 
                 foreach ($ambangList as $ambang) {
                     if ($value >= $ambang->min && $value <= $ambang->max) {
-                        return ucfirst(strtolower($ambang->level)); // pastikan huruf besar di awal
+                        return $ambang->level->nama ?? 'Tidak diketahui';
                     }
                 }
 
@@ -37,7 +41,7 @@ class SensorController extends Controller
             $level_kemiringan  = $getLevel('kemiringan', $validated['kemiringan']);
             $level_kelembapan  = $getLevel('kelembapan', $validated['kelembapan']);
 
-            // Getaran (khusus 0 = Normal, 1 = Waspada)
+            // Getaran (0 = Normal, 1 = Waspada)
             $level_getaran = match ((int) $validated['getaran']) {
                 0 => 'Normal',
                 1 => 'Waspada',
@@ -60,25 +64,29 @@ class SensorController extends Controller
             );
 
             $bahaya = array_search($maxLevel, $level_map);
+            // Ambil level_id dari nama level bahaya tertinggi
+$level = Level::where('nama', $bahaya)->first();
+$levelId = $level ? $level->id : null;
+
 
             // Simpan ke database
             $sensor = DataSensor::create([
-                'kemiringan' => $validated['kemiringan'],
-                'getaran'    => $validated['getaran'],
-                'kelembapan' => $validated['kelembapan'],
-                'bahaya'     => $bahaya
-            ]);
+            'kemiringan' => $validated['kemiringan'],
+            'getaran'    => $validated['getaran'],
+            'kelembapan' => $validated['kelembapan'],
+            'level_id'   => $levelId, // simpan level_id
+        ]);
 
-            return response()->json([
-                'message' => 'Data berhasil disimpan',
-                'data' => $sensor,
-                'tingkat' => [
-                    'kemiringan' => $level_kemiringan,
-                    'getaran' => $level_getaran,
-                    'kelembapan' => $level_kelembapan,
-                    'bahaya_keseluruhan' => $bahaya
-                ]
-            ], 201);
+           return response()->json([
+    'message' => 'Data berhasil disimpan',
+    'data' => $sensor,
+    'tingkat' => [
+        'kemiringan' => $level_kemiringan,
+        'getaran' => $level_getaran,
+        'kelembapan' => $level_kelembapan,
+    ]
+], 201);
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(['error' => 'Validasi gagal', 'details' => $e->errors()], 422);
         } catch (\Exception $e) {
