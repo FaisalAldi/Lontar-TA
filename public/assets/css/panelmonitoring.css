@@ -369,5 +369,12 @@ canvas {
     height: 100% !important;
 }
 
+@media (max-width: 768px) {
+    .content-container {
+        height: auto !important;      /* ⬅️ override tinggi tetap */
+        max-height: unset !important; /* ⬅️ hapus batas tinggi */
+        min-height: unset !important;
+    }
+}
 
 

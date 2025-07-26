@@ -13,7 +13,7 @@
         <!-- SIDEBAR -->
         <div class="sidebar-section" id="sidebar">
             <div class="sidebar-top">
-                <img src="{{ asset('assets/image/logo Dashboard.png') }}" alt="Logo" class="logo">
+                <img src="{{ asset('assets/image/Logo Lontar.png') }}" alt="Logo" class="logo">
             </div>
             <div class="sidebar" id="sidebarContent">
                 <p>Dashboard</p>
@@ -29,7 +29,7 @@
                 <button class="toggle-sidebar mobile-toggle" onclick="toggleSidebar()">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h2>LONTAR</h2>
+                <h2>Halo, Sobat LONTAR!</h2>
             </div>
 
             <div class="content">

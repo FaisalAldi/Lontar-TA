@@ -32,14 +32,30 @@ html, body {
 
 
 .sidebar-top {
-    padding: 10px;
+    padding: 30px 10px 10px 10px; /* Geser sedikit ke bawah */
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column; /* Susun vertikal: logo dulu, lalu garis */
+}
+
+.sidebar-top .logo {
+    margin-bottom: 15px; /* Jarak antara logo dan garis */
+    max-width: 100%; /* Biar responsif jika perlu */
+    height: auto;
+}
+
+.sidebar-top::after {
+    content: '';
+    display: block;
+    width: 115%; /* Panjang garis, bisa disesuaikan */
+    height: 1px;
+    background-color: #919191; /* Warna abu-abu */
+    margin-top: 10px;
 }
 
 .logo {
-    width: 50px;
+    width: 150px;
     height: auto;
 }
 
