@@ -48,7 +48,7 @@
     }
 
     async function fetchChartData() {
-        const response = await fetch('/api/last10-sensor'); // Pastikan ini sesuai dengan web.php
+        const response = await fetch('/last10-sensor'); // Pastikan ini sesuai dengan web.php
         const data = await response.json();
         return data;
     }

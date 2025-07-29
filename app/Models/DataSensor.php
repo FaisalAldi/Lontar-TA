@@ -11,7 +11,6 @@ class DataSensor extends Model
 
     // Kolom yang boleh diisi
     protected $fillable = [
-        'tanggal_dan_waktu',
         'kemiringan',
         'getaran',
         'kelembapan',

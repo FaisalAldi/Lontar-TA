@@ -27,6 +27,7 @@ class DashboardController extends Controller
             'getaran' => $latestSensor->getaran,
             'kelembapan' => $latestSensor->kelembapan,
             'tingkat_bahaya' => $latestSensor->level->nama ?? 'Tidak diketahui',
+            'level_id' => $latestSensor->level->id ?? 0,
             'created_at' => $latestSensor->created_at->toDateTimeString(),
         ]);
     }

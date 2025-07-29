@@ -152,6 +152,11 @@ html, body {
 
 .header h2 {
     margin: 0;
+    font-size: 24px;
+    white-space: nowrap;        /* Cegah teks pindah baris */
+    overflow: hidden;           /* Sembunyikan kelebihan */
+    text-overflow: ellipsis;    /* Tambahkan "..." jika terlalu panjang */
+    flex: 1;                    /* Ambil sisa ruang */
 }
 
 .main-section {
@@ -178,7 +183,63 @@ html, body {
     }
     .sidebar-section.collapsed {
     width: 0px;
-}
+    }
+     .header h2 {
+            font-size: 16px;             /* Ukuran lebih kecil di layar kecil */
+            text-align: center;          /* Tengah agar simetris */
+            white-space: normal;         /* Izinkan pindah baris */
+            overflow: visible;
+            text-overflow: unset;
+            flex: 1 1 100%;              /* Biarkan pindah ke baris penuh */
+        }
 }
 
+/* Tampilan Default (Desktop) */
+.emergency-popup {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    background-color: #ff4d4f;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+    z-index: 999;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    width: max-content;
+    max-width: 300px;
+}
+
+.emergency-popup a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.emergency-popup a i {
+    margin-right: 5px;
+}
+
+/* Sembunyikan popup */
+.emergency-popup.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-20px);
+}
+
+/* Mobile: kiri bawah */
+@media (max-width: 768px) {
+    .emergency-popup {
+        position: fixed;
+        top: auto;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        max-width: calc(100% - 40px);
+        font-size: 13px;
+        padding: 12px 14px;
+        border-radius: 10px;
+    }
+}
 

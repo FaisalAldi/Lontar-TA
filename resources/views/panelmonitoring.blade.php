@@ -1,7 +1,7 @@
 @extends ('layout')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('assets/css/panelmonitoring.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/panelmonitoring.css') }}?v={{ time() }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <div class="content-container">
@@ -170,7 +170,7 @@
 
     async function loadGabunganChartData() {
         try {
-            const response = await fetch('/api/last10-sensor');
+            const response = await fetch('/last10-sensor');
             const data = await response.json();
 
             if (data.latest_created_at !== lastDataTimestamp) {
@@ -193,7 +193,7 @@
 </script>
 <script>
 function fetchLatestSensorData() {
-    fetch('/api/latest-sensor')
+    fetch('/latest-sensor')
         .then(response => response.json())
         .then(data => {
              console.log("DATA SENSOR DARI API:", data); // << ini log utamanya

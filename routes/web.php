@@ -26,8 +26,8 @@ Route::get('/PanelGrafik', function () {
     return view('panelgrafik');
 });
 
-Route::get('/api/last10-sensor', [DashboardController::class, 'get10DataSensor']);
+Route::get('/last10-sensor', [DashboardController::class, 'get10DataSensor']);
 
-Route::get('/api/latest-sensor', [DashboardController::class, 'getLatestSensor'])->name('latest.sensor');
+Route::get('/latest-sensor', [DashboardController::class, 'getLatestSensor'])->name('latest.sensor');
 
 Route::get('/trend-terkini', [DashboardController::class, 'getTrendTerkini']);
